@@ -4,16 +4,12 @@ import com.github.kittinunf.fuel.httpGet
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.apache.logging.log4j.kotlin.Logging
-import org.isen.news.model.INewsModel
 import org.isen.news.model.INewsModelObservable
 import org.isen.news.model.data.Country
-import tornadofx.*
 import kotlin.properties.Delegates
 
-class CountryModel : ViewModel(), INewsModel {
+class CountryModel : DefaultNewsModel() {
     companion object : Logging
-
-    private var listeners: ArrayList<INewsModelObservable> = ArrayList()
 
     private val allowedCountries: String = "ae;ar;at;au;be;bg;br;ca;ch;cn;co;cu;cz;de;eg;fr;gb;gr;hk;hu;id;ie;il;in;it;jp;kr;lt;lv;ma;mx;my;ng;nl;no;nz;ph;pl;pt;ro;rs;ru;sa;se;sg;si;sk;th;tr;tw;ua;us;ve;za"
 
