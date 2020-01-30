@@ -26,9 +26,9 @@ class TestTopHeadlineRequest {
             assertNotNull(it).also { println(it) }
         } ?.let {
             assertEquals("ok", it.status)
-            assertEquals(34, it.totalResults)
             it.articles.also {
                 assertNotNull(it)
+                assert(it.isNotEmpty())
             }
         }
     }
@@ -43,30 +43,61 @@ class TestTopHeadlineRequest {
             assertNotNull(it).also { println(it) }
         } ?.let {
             assertEquals("ok", it.status)
-            assertEquals(3185, it.totalResults)
             it.articles.also {
                 assertNotNull(it)
+                assert(it.isNotEmpty())
             }
         }
     }
 
     @Test
-    fun countryAndSource() {
-
-    }
-
-    @Test
-    fun categoryAndSource() {
-
-    }
-
-    @Test
     fun byKeywords() {
+        val (request, response, result) = "top-headlines?q=corona&apiKey=$NEWS_API_KEY"
+                .httpGet().responseObject(HeadlineRequest.Deserializer())
+        assertTrue(response.isSuccessful)
 
+        result.component1().also {
+            assertNotNull(it).also { println(it) }
+        } ?.let {
+            assertEquals("ok", it.status)
+            it.articles.also {
+                assertNotNull(it)
+                assert(it.isNotEmpty())
+            }
+        }
+    }
+
+    @Test
+    fun noResultFromKeyword() {
+        val (request, response, result) = "top-headlines?q=ejzfioefjzeiofjzeio&apiKey=$NEWS_API_KEY"
+                .httpGet().responseObject(HeadlineRequest.Deserializer())
+        assertTrue(response.isSuccessful)
+
+        result.component1().also {
+            assertNotNull(it).also { println(it) }
+        } ?.let {
+            assertEquals("ok", it.status)
+            it.articles.also {
+                assertNotNull(it)
+                assert(it.isEmpty())
+            }
+        }
     }
 
     @Test
     fun pageSizeAndPage() {
+        val (request, response, result) = "top-headlines?country=us&page=2&pageSize=5&apiKey=$NEWS_API_KEY"
+                .httpGet().responseObject(HeadlineRequest.Deserializer())
+        assertTrue(response.isSuccessful)
 
+        result.component1().also {
+            assertNotNull(it).also { println(it) }
+        } ?.let {
+            assertEquals("ok", it.status)
+            it.articles.also {
+                assertNotNull(it)
+                assert(it.isNotEmpty())
+            }
+        }
     }
 }
