@@ -11,7 +11,11 @@ data class Country(
     constructor(): this("", "", "")
 
     class Deserializer : ResponseDeserializable<Array<Country>> {
-        override fun deserialize(content: String): Array<Country> =
+        override fun deserialize(content: String): Array<Country>? =
                 Gson().fromJson(content, Array<Country>::class.java)
+    }
+
+    override fun toString(): String {
+        return "$name"
     }
 }

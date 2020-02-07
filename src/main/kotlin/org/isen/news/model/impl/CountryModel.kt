@@ -46,4 +46,14 @@ class CountryModel : DefaultNewsModel() {
                     }
                 }
     }
+
+    fun indexOfAllowedCountryFromAlpha2code(alpha2code: String): Int? {
+        val countriesCodes: List<String> = allowedCountries.split(";")
+        allowedCountries.split(";").find {
+            it == alpha2code
+        } ?.let {
+            return countriesCodes.indexOf(it)
+        }
+        return null
+    }
 }

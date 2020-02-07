@@ -24,15 +24,17 @@ class TestCountry {
 
         result.component1().also {
             assertNotNull(it).also { println(it) }
-        } ?.let {
-            assertEquals(1, it.size)
-            it.first().let { c ->
-                assertEquals("France", c.name)
-                assertEquals("FR", c.alpha2Code)
-                assertEquals("fr", c.alpha2Code.toLowerCase())
-                assertEquals("https://restcountries.eu/data/fra.svg",
-                        c.flag
-                )
+        }?.let {
+            it.let { req ->
+                assertTrue(req.isNotEmpty())
+                req.first().let { c ->
+                    assertEquals("France", c.name)
+                    assertEquals("FR", c.alpha2Code)
+                    assertEquals("fr", c.alpha2Code.toLowerCase())
+                    assertEquals("https://restcountries.eu/data/fra.svg",
+                            c.flag
+                    )
+                }
             }
         }
     }
@@ -44,38 +46,38 @@ class TestCountry {
         assertTrue(response.isSuccessful)
 
         result.component1().also {
-            assertNotNull(it).also {
-                it.forEach {
-                    c -> println(c)
+            assertNotNull(it).also { req ->
+                req.forEach { c ->
+                    println(c)
                 }
             }
-        } ?.let {
-            assertEquals(3, it.size)
-            it.first().let { c ->
-                assertEquals("France", c.name)
-                assertEquals("FR", c.alpha2Code)
-                assertEquals("fr", c.alpha2Code.toLowerCase())
-                assertEquals("https://restcountries.eu/data/fra.svg",
-                        c.flag
-                )
-            }
-            it[1].let {
-                c ->
-                assertEquals("United Kingdom of Great Britain and Northern Ireland", c.name)
-                assertEquals("GB", c.alpha2Code)
-                assertEquals("gb", c.alpha2Code.toLowerCase())
-                assertEquals("https://restcountries.eu/data/gbr.svg",
-                        c.flag
-                )
-            }
-            it[2].let {
-                c ->
-                assertEquals("United States of America", c.name)
-                assertEquals("US", c.alpha2Code)
-                assertEquals("us", c.alpha2Code.toLowerCase())
-                assertEquals("https://restcountries.eu/data/usa.svg",
-                        c.flag
-                )
+        }?.let {
+            it.let { req ->
+                assertEquals(3, req.size)
+                req.first().let { c ->
+                    assertEquals("France", c.name)
+                    assertEquals("FR", c.alpha2Code)
+                    assertEquals("fr", c.alpha2Code.toLowerCase())
+                    assertEquals("https://restcountries.eu/data/fra.svg",
+                            c.flag
+                    )
+                }
+                req[1].let { c ->
+                    assertEquals("United Kingdom of Great Britain and Northern Ireland", c.name)
+                    assertEquals("GB", c.alpha2Code)
+                    assertEquals("gb", c.alpha2Code.toLowerCase())
+                    assertEquals("https://restcountries.eu/data/gbr.svg",
+                            c.flag
+                    )
+                }
+                req[2].let { c ->
+                    assertEquals("United States of America", c.name)
+                    assertEquals("US", c.alpha2Code)
+                    assertEquals("us", c.alpha2Code.toLowerCase())
+                    assertEquals("https://restcountries.eu/data/usa.svg",
+                            c.flag
+                    )
+                }
             }
         }
     }
@@ -87,8 +89,12 @@ class TestCountry {
         assertTrue(response.isSuccessful)
 
         result.component1().also {
-            assertNotNull(it)
-        } ?.let {
+            assertNotNull(it).also {
+                it.forEach { c ->
+                    println(c)
+                }
+            }
+        }?.let {
             assertNull(it.first())
         }
     }
@@ -100,30 +106,31 @@ class TestCountry {
         assertTrue(response.isSuccessful)
 
         result.component1().also {
-            assertNotNull(it).also {
-                it.forEach {
-                    c -> println(c)
+            assertNotNull(it).also { req ->
+                req.forEach { c ->
+                    println(c)
                 }
             }
-        } ?.let {
-            assertEquals(3, it.size)
-            it.first().let { c ->
-                assertEquals("France", c.name)
-                assertEquals("FR", c.alpha2Code)
-                assertEquals("fr", c.alpha2Code.toLowerCase())
-                assertEquals("https://restcountries.eu/data/fra.svg",
-                        c.flag
-                )
-            }
-            assertNull(it[1])
-            it[2].let {
-                c ->
-                assertEquals("United States of America", c.name)
-                assertEquals("US", c.alpha2Code)
-                assertEquals("us", c.alpha2Code.toLowerCase())
-                assertEquals("https://restcountries.eu/data/usa.svg",
-                        c.flag
-                )
+        }?.let {
+            it.let { req ->
+                assertEquals(3, req.size)
+                req.first().let { c ->
+                    assertEquals("France", c.name)
+                    assertEquals("FR", c.alpha2Code)
+                    assertEquals("fr", c.alpha2Code.toLowerCase())
+                    assertEquals("https://restcountries.eu/data/fra.svg",
+                            c.flag
+                    )
+                }
+                assertNull(req[1])
+                req[2].let { c ->
+                    assertEquals("United States of America", c.name)
+                    assertEquals("US", c.alpha2Code)
+                    assertEquals("us", c.alpha2Code.toLowerCase())
+                    assertEquals("https://restcountries.eu/data/usa.svg",
+                            c.flag
+                    )
+                }
             }
         }
     }

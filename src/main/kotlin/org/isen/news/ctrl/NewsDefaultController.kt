@@ -3,7 +3,7 @@ package org.isen.news.ctrl
 import org.isen.news.model.INewsModel
 import org.isen.news.view.INewsView
 
-open class NewsDefaultController() {
+open class NewsDefaultController() : INewsController {
     protected val views: ArrayList<INewsView> = ArrayList()
 
     protected var models: ArrayList<INewsModel> = arrayListOf()
@@ -12,20 +12,20 @@ open class NewsDefaultController() {
         this.models = models
     }
 
-    fun registerView(v: INewsView) {
+    override fun registerView(v: INewsView) {
         this.views.add(v)
         models.forEach {
             it.register(v)
         }
     }
 
-    fun displayView() {
+    override fun displayView() {
         views.forEach {
             it.display()
         }
     }
 
-    fun closeView() {
+    override fun closeView() {
         views.forEach {
             it.close()
         }

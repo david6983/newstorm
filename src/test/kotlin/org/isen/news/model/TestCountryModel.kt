@@ -6,6 +6,7 @@ import org.isen.news.model.impl.CountryModel
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class TestCountryModel {
@@ -26,7 +27,7 @@ class TestCountryModel {
 
         model.register(myObserver)
 
-        model.countries = arrayOf(Country())
+        model.countries = arrayOf()
         assertTrue(
             passObserver,
     "after update country on property, observer must receive countries"
@@ -42,7 +43,7 @@ class TestCountryModel {
             override fun updateNews(data: Any) {
                 passObserver = true;
                 logger.info("updateNews with : $data")
-                assertEquals(Array<Country>::class.java, data::class.java)
+                assertEquals(Country ::class.java, data::class.java)
             }
         }
 
@@ -65,5 +66,12 @@ class TestCountryModel {
         assertEquals("South Africa", model.countries.last().name)
         assertEquals("ZA", model.countries.last().alpha2Code)
         assertEquals("https://restcountries.eu/data/zaf.svg", model.countries.last().flag)
+    }
+
+    @Test
+    fun testIndexFromAlpha2code() {
+        val model: CountryModel = CountryModel()
+        assertEquals(3, model.indexOfAllowedCountryFromAlpha2code("au"))
+        assertNull(model.indexOfAllowedCountryFromAlpha2code("fejif"))
     }
 }

@@ -28,7 +28,7 @@ class TopHeadlineModel : DefaultNewsModel(), INewsTopHeadlineModel {
     }
 
     override fun findBreakingNewsBySource(source: String, page: Int?, q: String?) {
-        logger.info("get breaking news")
+        logger.info("get breaking news from sources")
         GlobalScope.launch { getBreakingNewsBySource(source, page, q) }
     }
 
@@ -36,7 +36,7 @@ class TopHeadlineModel : DefaultNewsModel(), INewsTopHeadlineModel {
         buildBreakingNewsQuery(country, category, page, q)
                 .httpGet().responseObject(HeadlineRequest.Deserializer()) {
                     request, response, result ->
-                    logger.info("StatusCode:${response.statusCode}")
+                    logger.info("StatusCode (breaking news):${response.statusCode}")
                     result.component1()?.let {
                         headlineRequest = it
                     }
@@ -47,7 +47,7 @@ class TopHeadlineModel : DefaultNewsModel(), INewsTopHeadlineModel {
         buildBreakingNewsBySourceQuery(source, page, q)
                 .httpGet().responseObject(HeadlineRequest.Deserializer()) {
                     request, response, result ->
-                    logger.info("StatusCode:${response.statusCode}")
+                    logger.info("StatusCode (source : $source):${response.statusCode}")
                     result.component1()?.let {
                         headlineRequest = it
                     }
@@ -71,6 +71,7 @@ class TopHeadlineModel : DefaultNewsModel(), INewsTopHeadlineModel {
         if (pageSize != 0) {
             query += "&pageSize=$pageSize"
         }
+        logger.debug(query)
         return query
     }
 
@@ -85,6 +86,7 @@ class TopHeadlineModel : DefaultNewsModel(), INewsTopHeadlineModel {
         if (pageSize != 0) {
             query += "&pageSize=$pageSize"
         }
+        logger.debug(query)
         return query
     }
 }

@@ -3,7 +3,10 @@
  */
 package org.isen.news
 
+import tornadofx.*
+import org.isen.news.view.fx.NewsViewWrapperApp
 
 fun main(args: Array<String>) {
-
+    // launch the tornadofx application
+    launch<NewsViewWrapperApp>(args)
 }

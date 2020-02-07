@@ -8,4 +8,8 @@ enum class Category(val title: String) {
     SCIENCE("science"),
     SPORTS("sports"),
     TECHNOLOGY("technology");
+
+    override fun toString(): String {
+        return title
+    }
 }

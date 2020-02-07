@@ -41,6 +41,9 @@ dependencies {
     implementation("com.github.kittinunf.fuel:fuel-coroutines:2.0.1")
     implementation("com.github.kittinunf.fuel:fuel-gson:2.0.1")
 
+    // Fuse
+    compile(group= "com.github.kittinunf.fuse", name= "fuse", version= "1.0.0-beta1")
+
     // log4j
     implementation("org.apache.logging.log4j:log4j-api-kotlin:1.0.0")
     implementation("org.apache.logging.log4j:log4j-api:2.11.1")

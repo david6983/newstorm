@@ -9,4 +9,7 @@ data class Source(
         val language: String,
         val country: String
 ) {
+    override fun toString(): String {
+        return id ?: ""
+    }
 }

@@ -12,4 +12,14 @@ data class Article(
         val publishedAt: Date,
         val content: String?
 ) {
+    constructor() : this(
+            null,
+            null,
+            "",
+            "",
+            "",
+            "",
+            Date(),
+            null
+    )
 }

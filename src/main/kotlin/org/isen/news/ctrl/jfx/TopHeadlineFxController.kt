@@ -1,18 +1,14 @@
-package org.isen.news.ctrl
+package org.isen.news.ctrl.jfx
 
 import org.isen.news.model.impl.CountryModel
 import org.isen.news.model.impl.SourceModel
 import org.isen.news.model.impl.TopHeadlineModel
+import tornadofx.*
 
-class TopHeadlineController(
-        topHeadlineModel: TopHeadlineModel,
-        countryModel: CountryModel,
-        sourceModel: SourceModel
-) : NewsDefaultController() {
+class TopHeadlineFxController : NewsDefaultFxController() {
     init {
-        super.models.add(topHeadlineModel)
-        super.models.add(countryModel)
-        super.models.add(sourceModel)
+        super.models.add(TopHeadlineModel())
+        super.models.add(CountryModel())
     }
 
     fun findBreakingNews(country: String?, category: String?, page: Int?, q: String?) {
@@ -21,5 +17,13 @@ class TopHeadlineController(
 
     fun findBreakingNewsBySource(source: String, page: Int?, q: String?) {
         (super.models[0] as TopHeadlineModel).findBreakingNewsBySource(source, page, q)
+    }
+
+    fun findCountries() {
+        (super.models[1] as CountryModel).findCountries()
+    }
+
+    fun indexOfAllowedCountryFromAlpha2code(alpha2code: String): Int? {
+        return (super.models[1] as CountryModel).indexOfAllowedCountryFromAlpha2code(alpha2code)
     }
 }
