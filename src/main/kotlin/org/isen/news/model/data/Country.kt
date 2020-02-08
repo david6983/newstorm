@@ -3,6 +3,13 @@ package org.isen.news.model.data
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.google.gson.Gson
 
+/**
+ * Represents a country
+ *
+ * @property name
+ * @property alpha2Code
+ * @property flag
+ */
 data class Country(
         val name: String,
         val alpha2Code: String,

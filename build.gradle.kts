@@ -41,7 +41,7 @@ dependencies {
     implementation("com.github.kittinunf.fuel:fuel-coroutines:2.0.1")
     implementation("com.github.kittinunf.fuel:fuel-gson:2.0.1")
 
-    // Fuse
+    // Fuse (not implemented yet because of ExperimentalTime annotation issues)
     compile(group= "com.github.kittinunf.fuse", name= "fuse", version= "1.0.0-beta1")
 
     // log4j

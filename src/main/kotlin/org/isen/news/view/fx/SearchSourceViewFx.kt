@@ -3,6 +3,8 @@ package org.isen.news.view.fx
 import javafx.application.Platform
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
+import javafx.scene.text.FontWeight
+import javafx.scene.text.TextAlignment
 import javafx.stage.StageStyle
 import org.apache.logging.log4j.kotlin.Logging
 import org.isen.news.ctrl.jfx.SourceFxController
@@ -22,19 +24,12 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
 
     private var categorySelect: ComboBox<Category> by singleAssign()
     private var countrySelect: ComboBox<Country> by singleAssign()
-    private var sourceSelect: ComboBox<Source> by singleAssign()
-    private var keywordsArea: TextArea by singleAssign()
-    private var keywordsAreaSource: TextArea by singleAssign()
 
     private var statusLabel: Label by singleAssign()
 
     private var filterDrawer: Drawer by singleAssign()
 
-    private var pageLabel: Label by singleAssign()
-
     private var sourceGrid: GridPane by singleAssign()
-
-    private val formatter = SimpleDateFormat("dd/MMMMMM/yyyy hh:mm:ss")
 
     override val root = borderpane {
         left {
@@ -46,25 +41,13 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
                         form {
                             fieldset("Filters") {
                                 vbox {
-                                    field("Keywords") {
-                                        textarea() {
-                                            keywordsArea = this
-                                            prefWidth = 120.0
-                                            this.textProperty().onChange {
-                                                //headlineFxController.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, null, keywordsArea.text)
-                                            }
-                                        }
-                                    }
-                                    field("title") {
-                                        textfield()
-                                    }
                                     field("Category") {
                                         combobox<Category> {
                                             categorySelect = this
                                             items = categories
                                             value = Category.GENERAL
                                             this.valueProperty().onChange {
-                                                //headlineFxController.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, null, keywordsArea.text)
+                                                sourceController.findSources(categorySelect.selectedItem?.title, null, countrySelect.selectedItem?.alpha2Code)
                                             }
                                         }
                                     }
@@ -73,12 +56,12 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
                                             countrySelect = this
                                             prefWidth = 120.0
                                             this.valueProperty().onChange {
-                                                //headlineFxController.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, null, keywordsArea.text)
+                                                sourceController.findSources(categorySelect.selectedItem?.title, null, countrySelect.selectedItem?.alpha2Code)
                                             }
                                         }
                                     }
                                     button("Filter").action {
-                                        //headlineFxController.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, null, keywordsArea.text)
+                                        sourceController.findSources(categorySelect.selectedItem?.title, null, countrySelect.selectedItem?.alpha2Code)
                                     }
                                 }
                             }
@@ -101,26 +84,6 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
                         gridpane {
                             sourceGrid = this
                         }
-                        prefWidth = 800.0
-                    }
-                }
-                bottom {
-                    hbox {
-                        button("Previous page").action {
-                            if (pageLabel.text.toInt() > 1) {
-                                pageLabel.text = (pageLabel.text.toInt() - 1).toString()
-                                //headlineFxController.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, pageLabel.text.toInt(), "")
-                            }
-                        }
-                        label("1") {
-                            pageLabel = this
-                        }
-                        button("Next page").action {
-                            pageLabel.text = (pageLabel.text.toInt() + 1).toString()
-                            //headlineFxController.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, pageLabel.text.toInt(), "")
-                        }
-
-                        prefWidth = 800.0
                     }
                 }
             }
@@ -128,51 +91,48 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
         bottom {
             label() {
                 statusLabel = this
+                paddingAll = 10
             }
         }
     }
 
     private fun updateSources(data: SourceRequest) {
         Platform.runLater {
-            logger.info("updating sources")
-            data.sources?.let { sourceSelect.items.addAll(it) }
-            statusLabel.text = "Status code : ${data.status}"
-        }
-    }
-
-    private fun updateBreakingNews(data: HeadlineRequest) {
-        Platform.runLater {
             logger.info("clearing news view")
             sourceGrid.children.clear()
-            logger.info("updating breaking news")
+            logger.info("updating sources")
             statusLabel.text = "Status code : ${data.status}"
-            if (!data.articles.isNullOrEmpty()) {
-                data.articles.withIndex().forEach { (index, item) ->
+            if (!data.sources.isNullOrEmpty()) {
+                data.sources.withIndex().forEach { (index, item) ->
                     logger.info("updateNews $item")
                     sourceGrid.addRow(index, borderpane {
                         top {
-                            label(item.title)
-                        }
-                        bottom {
-                            gridpane {
-                                row {
-                                    if (item.author != null) {
-                                        label(item.author)
-                                    } else {
-                                        label("Unknown author")
-                                    }
-                                    label(formatter.format(item.publishedAt))
-                                    button("Open") {
-                                        addClass("btn-info", "btn-lg")
-                                        action {
-                                            find<ArticleViewFx>(mapOf("article" to item)).openWindow(stageStyle = StageStyle.UTILITY)
-                                        }
-                                    }
+                            label(item.name) {
+                                style {
+                                    fontSize = 18.px
+                                    fontWeight = FontWeight.BOLD
                                 }
+                                paddingAll = 10
+                                textAlignment = TextAlignment.CENTER
                             }
                         }
+                        bottom {
+                            button("Official website").action {
+                                hostServices.showDocument(item.url)
+                            }
+                            paddingAll = 15
+                        }
                         center {
-                            text(item.description)
+                            vbox {
+                                label(item.description)
+                                label("category : ${item.category}")
+                                label("language : ${item.language}")
+                                label("country : ${item.country}")
+                                paddingAll = 15
+                            }
+                        }
+                        style {
+                            borderColor += box(c(0, 0, 0))
                         }
                     })
                 }
@@ -181,6 +141,17 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
                 sourceGrid.addRow(0, pane {
                     label("No results found")
                 })
+            }
+        }
+    }
+
+    private fun updateStatusCode(code: Int) {
+        Platform.runLater {
+            statusLabel.text = "Status code : " + when(code) {
+                200 -> "$code - message : ok"
+                401 -> "$code - message : api key error unauthorized"
+                429 -> "$code - message : too many requests for today"
+                else -> "$code - message : error"
             }
         }
     }
@@ -194,11 +165,9 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
             prefHeight = 800.0
         }
 
-        //headlineFxController.findCountries()
+        headlineFxController.findCountries()
         logger.info("all countries names fetched successfully")
-        //headlineFxController.findBreakingNews("fr", "general", null, null)
-        logger.info("breaking news found for France (fr)")
-        //sourceController.findSources(null, null, null, null)
+        sourceController.findSources(null, null, null)
         logger.info("all sources names fetched successfully")
     }
 
@@ -208,22 +177,21 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
 
     override fun updateNews(data: Any) {
         when (data) {
-            is HeadlineRequest -> {
-                //logger.info("receive breaking news")
-                //updateBreakingNews(data)
-            }
             is Array<*> -> {
                 data.forEach {
-                    //logger.info("received country ${it as Country}")
                     countrySelect.items.add(it as Country)
                 }
                 Platform.runLater {
-                    countrySelect.value = headlineFxController.indexOfAllowedCountryFromAlpha2code("fr")?.let { countrySelect.items.get(it) }
+                    countrySelect.value = headlineFxController.indexOfAllowedCountryFromAlpha2code("fr")?.let { countrySelect.items[it] }
                 }
             }
             is SourceRequest -> {
                 logger.info("receive sources $data")
-                //updateSources(data)
+                updateSources(data)
+            }
+            is Int -> {
+                TopHeadlineViewFx.logger.info("receive error code $data")
+                updateStatusCode(data)
             }
             else -> {
                 logger.info("data : $data")

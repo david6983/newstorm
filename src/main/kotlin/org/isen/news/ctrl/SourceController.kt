@@ -9,7 +9,7 @@ sourceModel: SourceModel
         super.models.add(sourceModel)
     }
 
-    fun findSources(category: String?, language: String?, country: String?, page: Int?) {
-        (super.models[0] as SourceModel).findSources(category, language, country, page)
+    fun findSources(category: String?, language: String?, country: String?) {
+        (super.models[0] as SourceModel).findSources(category, language, country)
     }
 }

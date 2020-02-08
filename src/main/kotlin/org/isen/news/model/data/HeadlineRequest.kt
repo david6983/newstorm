@@ -3,6 +3,13 @@ package org.isen.news.model.data
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.google.gson.Gson
 
+/**
+ * Response object for top-headline request
+ *
+ * @property status
+ * @property totalResults
+ * @property articles
+ */
 data class HeadlineRequest(
         val status: String,
         val totalResults: Int,

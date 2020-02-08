@@ -6,14 +6,17 @@ import tornadofx.*
 class NewsMainFxMenuBar : View() {
     override val root = menubar {
         menu("Edit") {
-            item("Change API KEY")
-            item("Change page's size")
-        }
-        menu("Views") {
-            item("Find sources").action {
-                find<SearchSourceViewFx>().openWindow(StageStyle.UTILITY)
+            item("Change API KEY").action {
+                find<ChangeApiKeyModal>().openModal(stageStyle = StageStyle.UTILITY)
             }
-            //item("Advanced search")
+            item("Change page's size").action {
+                find<ChangeApiKeyModal>().openModal(stageStyle = StageStyle.UTILITY)
+            }
+        }
+        menu("View") {
+            item("Source view").action {
+                find<SearchSourceViewFx>().openWindow(stageStyle = StageStyle.DECORATED)
+            }
         }
     }
 }

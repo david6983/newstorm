@@ -63,6 +63,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                             value = Category.GENERAL
                                             this.valueProperty().onChange {
                                                 controller.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, null, keywordsArea.text)
+                                                pageLabel.text = "1"
                                             }
                                         }
                                     }
@@ -72,6 +73,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                             prefWidth = 120.0
                                             this.valueProperty().onChange {
                                                 controller.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, null, keywordsArea.text)
+                                                pageLabel.text = "1"
                                             }
                                         }
                                     }
@@ -81,11 +83,13 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                             prefWidth = 120.0
                                             this.textProperty().onChange {
                                                 controller.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, null, keywordsArea.text)
+                                                pageLabel.text = "1"
                                             }
                                         }
                                     }
                                     button("Filter").action {
                                         controller.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, null, keywordsArea.text)
+                                        pageLabel.text = "1"
                                     }
                                 }
                             }
@@ -103,6 +107,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                             prefWidth = 120.0
                                             this.valueProperty().onChange {
                                                 controller.findBreakingNewsBySource(sourceSelect.value.toString(), null, keywordsAreaSource.text)
+                                                pageLabel.text = "1"
                                             }
                                         }
                                     }
@@ -112,11 +117,13 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                             prefWidth = 120.0
                                             this.textProperty().onChange {
                                                 controller.findBreakingNewsBySource(sourceSelect.value.toString(), null, keywordsAreaSource.text)
+                                                pageLabel.text = "1"
                                             }
                                         }
                                     }
                                     button("Filter").action {
                                         controller.findBreakingNewsBySource(sourceSelect.value.toString(), null, keywordsAreaSource.text)
+                                        pageLabel.text = "1"
                                     }
                                 }
                             }
@@ -186,7 +193,6 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                         }
                         hgap = 550.0
                         paddingAll = 15
-                        //prefWidth = 800.0
                     }
                 }
             }
@@ -203,7 +209,6 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
         Platform.runLater {
             logger.info("updating sources")
             data.sources?.let { sourceSelect.items.addAll(it) }
-            statusLabel.text = "Status code : ${data.status}"
         }
     }
 
@@ -212,7 +217,6 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
             logger.info("clearing news view")
             breakingNewsGrid.children.clear()
             logger.info("updating breaking news")
-            statusLabel.text = "Status code : ${data.status}"
             if (!data.articles.isNullOrEmpty()) {
                 data.articles.withIndex().forEach { (index, item) ->
                     logger.info("updateNews $item")
@@ -257,7 +261,6 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                         }
                         style {
                             borderColor += box(c(0, 0, 0))
-
                         }
                     })
                 }
@@ -266,6 +269,17 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                 breakingNewsGrid.addRow(0, pane {
                     label("No results found")
                 })
+            }
+        }
+    }
+
+    private fun updateStatusCode(code: Int) {
+        Platform.runLater {
+            statusLabel.text = "Status code : " + when(code) {
+                200 -> "$code - message : ok"
+                401 -> "$code - message : api key error unauthorized"
+                429 -> "$code - message : too many requests for today"
+                else -> "$code - message : error"
             }
         }
     }
@@ -283,7 +297,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
         logger.info("all countries names fetched successfully")
         controller.findBreakingNews("fr", "general", null, null)
         logger.info("breaking news found for France (fr)")
-        sourceController.findSources(null, null, null, null)
+        sourceController.findSources(null, null, null)
         logger.info("all sources names fetched successfully")
     }
 
@@ -309,6 +323,10 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
             is SourceRequest -> {
                 logger.info("receive sources $data")
                 updateSources(data)
+            }
+            is Int -> {
+                logger.info("receive error code $data")
+                updateStatusCode(data)
             }
             else -> {
                 logger.info("data : $data")

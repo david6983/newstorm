@@ -4,9 +4,7 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.isen.news.ctrl.TopHeadlineController
 import org.isen.news.model.data.Article
 import org.isen.news.model.data.Category
-import org.isen.news.model.data.Country
 import org.isen.news.model.data.HeadlineRequest
-import tornadofx.*
 import java.awt.*
 import java.awt.Dimension
 import java.awt.event.ActionEvent
@@ -14,7 +12,9 @@ import java.awt.event.ActionListener
 import java.text.SimpleDateFormat
 import javax.swing.*
 
-
+/**
+ * This class is no longer used because it's a tornadofx application
+ */
 class TopHeadlineView : INewsView, ActionListener {
     companion object : Logging
 
@@ -136,7 +136,7 @@ class TopHeadlineView : INewsView, ActionListener {
     private fun updateBreakingNews(data: HeadlineRequest) {
         val paneAllItem = JPanel(GridLayout(data.articles!!.size, 1))
 
-        for (item: Article in data.articles) {
+        for (item: Article in data.articles!!) {
             logger.debug("updateNews $item")
             paneAllItem.add(createArticles(item))
         }

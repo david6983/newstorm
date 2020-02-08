@@ -37,6 +37,7 @@ class TopHeadlineModel : DefaultNewsModel(), INewsTopHeadlineModel {
                 .httpGet().responseObject(HeadlineRequest.Deserializer()) {
                     request, response, result ->
                     logger.info("StatusCode (breaking news):${response.statusCode}")
+                    errorCode = response.statusCode
                     result.component1()?.let {
                         headlineRequest = it
                     }
@@ -48,6 +49,7 @@ class TopHeadlineModel : DefaultNewsModel(), INewsTopHeadlineModel {
                 .httpGet().responseObject(HeadlineRequest.Deserializer()) {
                     request, response, result ->
                     logger.info("StatusCode (source : $source):${response.statusCode}")
+                    errorCode = response.statusCode
                     result.component1()?.let {
                         headlineRequest = it
                     }

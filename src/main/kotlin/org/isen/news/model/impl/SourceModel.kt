@@ -21,13 +21,13 @@ class SourceModel : DefaultNewsModel(), INewsSourceModel {
         }
     }
 
-    override fun findSources(category: String?, language: String?, country: String?, page: Int?) {
+    override fun findSources(category: String?, language: String?, country: String?) {
         logger.info("get sources")
-        GlobalScope.launch { getSources(category, language, country, page) }
+        GlobalScope.launch { getSources(category, language, country) }
     }
 
-    private suspend fun getSources(category: String?, language: String?, country: String?, page: Int?) {
-        buildSourceQuery(category, language, country, page)
+    private suspend fun getSources(category: String?, language: String?, country: String?) {
+        buildSourceQuery(category, language, country)
                 .httpGet().responseObject(SourceRequest.Deserializer()) {
                     request, response, result ->
                     logger.info("StatusCode:${response.statusCode}")
@@ -37,7 +37,7 @@ class SourceModel : DefaultNewsModel(), INewsSourceModel {
                 }
     }
 
-    fun buildSourceQuery(category: String?, language: String?, country: String?, page: Int?): String {
+    fun buildSourceQuery(category: String?, language: String?, country: String?): String {
         var query: String = "$SOURCE_ROOT?apiKey=$apiKey"
         if (category != null) {
             query += "&category=$category"
@@ -47,12 +47,6 @@ class SourceModel : DefaultNewsModel(), INewsSourceModel {
         }
         if (country != null) {
             query += "&country=$country"
-        }
-        if (page != null && page > 1) {
-            query += "&page=$page"
-        }
-        if (pageSize != 0) {
-            query += "&pageSize=$pageSize"
         }
         logger.info("Source querry : $query")
         return query

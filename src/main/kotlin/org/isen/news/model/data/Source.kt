@@ -1,5 +1,16 @@
 package org.isen.news.model.data
 
+/**
+ * Represents a source
+ *
+ * @property id
+ * @property name
+ * @property description
+ * @property url
+ * @property category
+ * @property language
+ * @property country
+ */
 data class Source(
         val id: String?,
         val name: String,

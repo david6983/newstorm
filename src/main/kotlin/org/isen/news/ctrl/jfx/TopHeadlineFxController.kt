@@ -1,11 +1,15 @@
 package org.isen.news.ctrl.jfx
 
+import org.apache.logging.log4j.kotlin.Logging
+import org.isen.news.ctrl.INewsControllerParams
 import org.isen.news.model.impl.CountryModel
 import org.isen.news.model.impl.SourceModel
 import org.isen.news.model.impl.TopHeadlineModel
 import tornadofx.*
 
-class TopHeadlineFxController : NewsDefaultFxController() {
+class TopHeadlineFxController : NewsDefaultFxController(), INewsControllerParams {
+    companion object : Logging
+
     init {
         super.models.add(TopHeadlineModel())
         super.models.add(CountryModel())
@@ -25,5 +29,17 @@ class TopHeadlineFxController : NewsDefaultFxController() {
 
     fun indexOfAllowedCountryFromAlpha2code(alpha2code: String): Int? {
         return (super.models[1] as CountryModel).indexOfAllowedCountryFromAlpha2code(alpha2code)
+    }
+
+    override fun changeApiKey(key: String) {
+        (super.models.first() as TopHeadlineModel).apiKey = key
+    }
+
+    override fun changePageSize(pageSize: Int) {
+        (super.models.first() as TopHeadlineModel).pageSize = pageSize
+    }
+
+    override fun findErrorCode(): Int {
+        return (super.models.first() as TopHeadlineModel).errorCode
     }
 }
