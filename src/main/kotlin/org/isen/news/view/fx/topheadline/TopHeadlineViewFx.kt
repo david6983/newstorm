@@ -1,11 +1,7 @@
-package org.isen.news.view.fx
+package org.isen.news.view.fx.topheadline
 
 import javafx.application.Platform
-import javafx.beans.property.SimpleObjectProperty
-import javafx.beans.property.SimpleStringProperty
-import javafx.geometry.Pos
 import javafx.scene.control.*
-import javafx.scene.layout.Border
 import javafx.scene.layout.GridPane
 import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
@@ -16,10 +12,10 @@ import org.isen.news.ctrl.jfx.SourceFxController
 import org.isen.news.ctrl.jfx.TopHeadlineFxController
 import org.isen.news.model.data.*
 import org.isen.news.view.INewsView
+import org.isen.news.view.fx.fragments.ArticleViewFx
+import org.isen.news.view.fx.menubar.NewsMainFxMenuBar
 import tornadofx.*
-import java.awt.Color
 import java.text.SimpleDateFormat
-import javax.swing.JLabel
 
 class TopHeadlineViewFx : View("Breaking News"), INewsView {
     companion object : Logging
@@ -62,7 +58,12 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                             items = categories
                                             value = Category.GENERAL
                                             this.valueProperty().onChange {
-                                                controller.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, null, keywordsArea.text)
+                                                controller.findBreakingNews(
+                                                        countrySelect.selectedItem?.alpha2Code,
+                                                        categorySelect.selectedItem?.title,
+                                                        null,
+                                                        keywordsArea.text
+                                                )
                                                 pageLabel.text = "1"
                                             }
                                         }
@@ -72,23 +73,38 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                             countrySelect = this
                                             prefWidth = 120.0
                                             this.valueProperty().onChange {
-                                                controller.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, null, keywordsArea.text)
+                                                controller.findBreakingNews(
+                                                        countrySelect.selectedItem?.alpha2Code,
+                                                        categorySelect.selectedItem?.title,
+                                                        null,
+                                                        keywordsArea.text
+                                                )
                                                 pageLabel.text = "1"
                                             }
                                         }
                                     }
                                     field("Keywords") {
-                                        textarea() {
+                                        textarea {
                                             keywordsArea = this
                                             prefWidth = 120.0
                                             this.textProperty().onChange {
-                                                controller.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, null, keywordsArea.text)
+                                                controller.findBreakingNews(
+                                                        countrySelect.selectedItem?.alpha2Code,
+                                                        categorySelect.selectedItem?.title,
+                                                        null,
+                                                        keywordsArea.text
+                                                )
                                                 pageLabel.text = "1"
                                             }
                                         }
                                     }
                                     button("Filter").action {
-                                        controller.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, null, keywordsArea.text)
+                                        controller.findBreakingNews(
+                                                countrySelect.selectedItem?.alpha2Code,
+                                                categorySelect.selectedItem?.title,
+                                                null,
+                                                keywordsArea.text
+                                        )
                                         pageLabel.text = "1"
                                     }
                                 }
@@ -106,23 +122,35 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                             sourceSelect = this
                                             prefWidth = 120.0
                                             this.valueProperty().onChange {
-                                                controller.findBreakingNewsBySource(sourceSelect.value.toString(), null, keywordsAreaSource.text)
+                                                controller.findBreakingNewsBySource(
+                                                        sourceSelect.value.toString(),
+                                                        null,
+                                                        keywordsAreaSource.text
+                                                )
                                                 pageLabel.text = "1"
                                             }
                                         }
                                     }
                                     field("Keywords") {
-                                        textarea() {
+                                        textarea {
                                             keywordsAreaSource = this
                                             prefWidth = 120.0
                                             this.textProperty().onChange {
-                                                controller.findBreakingNewsBySource(sourceSelect.value.toString(), null, keywordsAreaSource.text)
+                                                controller.findBreakingNewsBySource(
+                                                        sourceSelect.value.toString(),
+                                                        null,
+                                                        keywordsAreaSource.text
+                                                )
                                                 pageLabel.text = "1"
                                             }
                                         }
                                     }
                                     button("Filter").action {
-                                        controller.findBreakingNewsBySource(sourceSelect.value.toString(), null, keywordsAreaSource.text)
+                                        controller.findBreakingNewsBySource(
+                                                sourceSelect.value.toString(),
+                                                null,
+                                                keywordsAreaSource.text
+                                        )
                                         pageLabel.text = "1"
                                     }
                                 }
@@ -157,14 +185,25 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                 pageLabel.text = (pageLabel.text.toInt() - 1).toString()
                                 if (!filterDrawer.multiselect) {
                                     if (filterDrawer.items.first().expanded) {
-                                        controller.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, pageLabel.text.toInt(), "")
+                                        controller.findBreakingNews(
+                                                countrySelect.selectedItem?.alpha2Code,
+                                                categorySelect.selectedItem?.title,
+                                                pageLabel.text.toInt(),
+                                                ""
+                                        )
                                     } else if (filterDrawer.items.last().expanded) {
-                                        controller.findBreakingNewsBySource(sourceSelect.value.toString(), pageLabel.text.toInt(), keywordsAreaSource.text)
+                                        controller.findBreakingNewsBySource(
+                                                sourceSelect.value.toString(),
+                                                pageLabel.text.toInt(),
+                                                keywordsAreaSource.text
+                                        )
                                     }
                                 } else {
                                     alert(Alert.AlertType.WARNING,
-                                            "Multiselection not allowed",
-                                            "You can't find breaking news by source and country, category ! Disable multiselect option"
+                                "Multiselection not allowed",
+                                "You can't find breaking news by source " +
+                                        "and country, category ! Disable " +
+                                        "multiselect option"
                                     )
                                 }
                             }
@@ -180,9 +219,18 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                             pageLabel.text = (pageLabel.text.toInt() + 1).toString()
                             if (!filterDrawer.multiselect) {
                                 if (filterDrawer.items.first().expanded) {
-                                    controller.findBreakingNews(countrySelect.selectedItem?.alpha2Code, categorySelect.selectedItem?.title, pageLabel.text.toInt(), "")
+                                    controller.findBreakingNews(
+                                            countrySelect.selectedItem?.alpha2Code,
+                                            categorySelect.selectedItem?.title,
+                                            pageLabel.text.toInt(),
+                                            ""
+                                    )
                                 } else if (filterDrawer.items.last().expanded) {
-                                    controller.findBreakingNewsBySource(sourceSelect.value.toString(), pageLabel.text.toInt(), keywordsAreaSource.text)
+                                    controller.findBreakingNewsBySource(
+                                            sourceSelect.value.toString(),
+                                            pageLabel.text.toInt(),
+                                            keywordsAreaSource.text
+                                    )
                                 }
                             } else {
                                 alert(Alert.AlertType.WARNING,
@@ -198,7 +246,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
             }
         }
         bottom {
-            label() {
+            label {
                 statusLabel = this
                 paddingAll = 10
             }
@@ -243,7 +291,9 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                     button("Open") {
                                         addClass("btn-info", "btn-lg")
                                         action {
-                                            find<ArticleViewFx>(mapOf("article" to item)).openWindow(stageStyle = StageStyle.UTILITY)
+                                            find<ArticleViewFx>(mapOf("article" to item)).openWindow(
+                                                    stageStyle = StageStyle.UTILITY
+                                            )
                                         }
                                     }
                                     hgap = 450.0
@@ -308,16 +358,18 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
     override fun updateNews(data: Any) {
         when (data) {
             is HeadlineRequest -> {
-                //logger.info("receive breaking news")
+                logger.info("receive breaking news")
                 updateBreakingNews(data)
             }
             is Array<*> -> {
                 data.forEach {
-                    //logger.info("received country ${it as Country}")
-                    countrySelect.items.add(it as Country)
+                    logger.info("received country ${it as Country} in top headline")
+                    countrySelect.items.add(it)
                 }
                 Platform.runLater {
-                    countrySelect.value = controller.indexOfAllowedCountryFromAlpha2code("fr")?.let { countrySelect.items.get(it) }
+                    countrySelect.value = controller.indexFromCode("fr")?.let {
+                        countrySelect.items[it]
+                    }
                 }
             }
             is SourceRequest -> {

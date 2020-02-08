@@ -1,4 +1,4 @@
-package org.isen.news.view.fx
+package org.isen.news.view.fx.fragments
 
 import javafx.scene.text.FontWeight
 import org.apache.logging.log4j.kotlin.Logging
@@ -6,9 +6,15 @@ import org.isen.news.model.data.Article
 import tornadofx.*
 import java.text.SimpleDateFormat
 
+/**
+ * View fragment of an article
+ */
 class ArticleViewFx : Fragment("Article") {
     companion object : Logging
 
+    /**
+     * the article information are given by parameters
+     */
     private val article: Article by param()
 
     private val formatter = SimpleDateFormat("dd/MMMMMM/yyyy hh:mm:ss")
@@ -20,6 +26,7 @@ class ArticleViewFx : Fragment("Article") {
 
     override val root = borderpane {
         top {
+            // article title
             label(article.title) {
                 style {
                     fontWeight = FontWeight.BOLD
@@ -31,12 +38,14 @@ class ArticleViewFx : Fragment("Article") {
         center {
             gridpane {
                 row {
+                    // article image
                     imageview(article.urlToImage) {
                         isPreserveRatio = true
                         fitWidth = 800.0
                     }
                 }
                 row {
+                    // article description
                     label(article.description) {
                         style {
                             fontSize = 16.px
@@ -44,6 +53,7 @@ class ArticleViewFx : Fragment("Article") {
                     }
                 }
                 row {
+                    // article content
                     article.content?.let { label(it)  }
                     if (article.content.isNullOrEmpty()) {
                         label("no content (read it on the official website")
@@ -54,6 +64,7 @@ class ArticleViewFx : Fragment("Article") {
         bottom {
             gridpane {
                 row {
+                    // article author
                     if (article.author != null) {
                         label(article.author!!) {
                             paddingAll = 10
@@ -63,7 +74,9 @@ class ArticleViewFx : Fragment("Article") {
                             paddingAll = 10
                         }
                     }
+                    // article date
                     label(formatter.format(article.publishedAt))
+                    // read online button that redirect to the website
                     button("Read online").action {
                         hostServices.showDocument(article.url)
                     }

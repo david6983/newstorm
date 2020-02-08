@@ -29,8 +29,8 @@ class TestCountryModel {
 
         model.countries = arrayOf()
         assertTrue(
-            passObserver,
-    "after update country on property, observer must receive countries"
+                passObserver,
+                "after update country on property, observer must receive countries"
         )
     }
 
@@ -43,7 +43,7 @@ class TestCountryModel {
             override fun updateNews(data: Any) {
                 passObserver = true;
                 logger.info("updateNews with : $data")
-                assertEquals(Country ::class.java, data::class.java)
+                assertEquals(Country::class.java, data::class.java)
             }
         }
 

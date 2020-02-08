@@ -27,7 +27,7 @@ class TopHeadlineFxController : NewsDefaultFxController(), INewsControllerParams
         (super.models[1] as CountryModel).findCountries()
     }
 
-    fun indexOfAllowedCountryFromAlpha2code(alpha2code: String): Int? {
+    fun indexFromCode(alpha2code: String): Int? {
         return (super.models[1] as CountryModel).indexOfAllowedCountryFromAlpha2code(alpha2code)
     }
 

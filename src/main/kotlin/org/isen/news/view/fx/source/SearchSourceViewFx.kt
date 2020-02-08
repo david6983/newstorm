@@ -1,18 +1,17 @@
-package org.isen.news.view.fx
+package org.isen.news.view.fx.source
 
 import javafx.application.Platform
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import javafx.scene.text.FontWeight
 import javafx.scene.text.TextAlignment
-import javafx.stage.StageStyle
 import org.apache.logging.log4j.kotlin.Logging
 import org.isen.news.ctrl.jfx.SourceFxController
 import org.isen.news.ctrl.jfx.TopHeadlineFxController
 import org.isen.news.model.data.*
 import org.isen.news.view.INewsView
+import org.isen.news.view.fx.topheadline.TopHeadlineViewFx
 import tornadofx.*
-import java.text.SimpleDateFormat
 
 class SearchSourceViewFx : View("Search a source"), INewsView {
     companion object : Logging
@@ -47,7 +46,11 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
                                             items = categories
                                             value = Category.GENERAL
                                             this.valueProperty().onChange {
-                                                sourceController.findSources(categorySelect.selectedItem?.title, null, countrySelect.selectedItem?.alpha2Code)
+                                                sourceController.findSources(
+                                                        categorySelect.selectedItem?.title,
+                                                        null,
+                                                        countrySelect.selectedItem?.alpha2Code
+                                                )
                                             }
                                         }
                                     }
@@ -56,12 +59,20 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
                                             countrySelect = this
                                             prefWidth = 120.0
                                             this.valueProperty().onChange {
-                                                sourceController.findSources(categorySelect.selectedItem?.title, null, countrySelect.selectedItem?.alpha2Code)
+                                                sourceController.findSources(
+                                                        categorySelect.selectedItem?.title,
+                                                        null,
+                                                        countrySelect.selectedItem?.alpha2Code
+                                                )
                                             }
                                         }
                                     }
                                     button("Filter").action {
-                                        sourceController.findSources(categorySelect.selectedItem?.title, null, countrySelect.selectedItem?.alpha2Code)
+                                        sourceController.findSources(
+                                                categorySelect.selectedItem?.title,
+                                                null,
+                                                countrySelect.selectedItem?.alpha2Code
+                                        )
                                     }
                                 }
                             }
@@ -147,7 +158,7 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
 
     private fun updateStatusCode(code: Int) {
         Platform.runLater {
-            statusLabel.text = "Status code : " + when(code) {
+            statusLabel.text = "Status code : " + when (code) {
                 200 -> "$code - message : ok"
                 401 -> "$code - message : api key error unauthorized"
                 429 -> "$code - message : too many requests for today"
@@ -182,7 +193,10 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
                     countrySelect.items.add(it as Country)
                 }
                 Platform.runLater {
-                    countrySelect.value = headlineFxController.indexOfAllowedCountryFromAlpha2code("fr")?.let { countrySelect.items[it] }
+                    countrySelect.value = headlineFxController
+                            .indexFromCode("fr")?.let {
+                                countrySelect.items[it]
+                            }
                 }
             }
             is SourceRequest -> {

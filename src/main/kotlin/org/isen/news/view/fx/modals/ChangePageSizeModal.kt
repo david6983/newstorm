@@ -1,4 +1,4 @@
-package org.isen.news.view.fx
+package org.isen.news.view.fx.modals
 
 import javafx.scene.control.Alert
 import javafx.scene.control.TextField

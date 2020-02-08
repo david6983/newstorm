@@ -1,6 +1,8 @@
-package org.isen.news.view.fx
+package org.isen.news.view.fx.menubar
 
 import javafx.stage.StageStyle
+import org.isen.news.view.fx.source.SearchSourceViewFx
+import org.isen.news.view.fx.modals.ChangeApiKeyModal
 import tornadofx.*
 
 class NewsMainFxMenuBar : View() {
