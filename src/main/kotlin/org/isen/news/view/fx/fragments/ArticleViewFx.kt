@@ -2,6 +2,7 @@ package org.isen.news.view.fx.fragments
 
 import javafx.geometry.Pos
 import javafx.scene.layout.Priority
+import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import org.apache.logging.log4j.kotlin.Logging
 import org.isen.news.model.data.Article
@@ -46,41 +47,37 @@ class ArticleViewFx : Fragment("Article") {
             }
         }
         center {
-            gridpane {
-                row {
-                    // article image
-                    hbox {
-                        imageview(article.urlToImage) {
-                            isPreserveRatio = true
-                            fitWidth = 800.0
-                            alignment = Pos.CENTER
-                        }
+            vbox {
+                // article image
+                hbox {
+                    imageview(article.urlToImage) {
+                        isPreserveRatio = true
+                        fitWidth = 800.0
+                        alignment = Pos.CENTER
+                    }
 
-                    }
                 }
-                row {
-                    // article description
-                    article.description?.let {
-                        label(it) {
-                            isWrapText = true
-                            style {
-                                fontSize = 16.px
-                            }
-                        }
-                    }
-                }
-                row {
+                hbox {
                     // article content
                     article.content?.let {
-                        label(it) {
-                            isWrapText = true
+                        textflow {
+                            paddingAll = 30
+                            text(it.dropLast(it.length - 1)) {
+                                font = Font("Serif", 34.0)
+                                style {
+                                    fontWeight = FontWeight.BOLD
+                                }
+                            }
+                            text(it.drop(1)) {
+                                font = Font("Serif", 18.0)
+                            }
                         }
                     }
                     if (article.content.isNullOrEmpty()) {
                         label("no content (read it on the official website)")
                     }
+                    alignment = Pos.CENTER
                 }
-                vgap = 70.0
             }
         }
         bottom {
@@ -121,7 +118,7 @@ class ArticleViewFx : Fragment("Article") {
 
     init {
         with (root) {
-            prefWidth = 1200.0
+            prefWidth = 800.0
             prefHeight = 900.0
         }
     }
