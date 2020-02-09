@@ -31,6 +31,7 @@ class SourceModel : DefaultNewsModel(), INewsSourceModel {
                 .httpGet().responseObject(SourceRequest.Deserializer()) {
                     request, response, result ->
                     logger.info("StatusCode:${response.statusCode}")
+                    errorCode = response.statusCode
                     result.component1()?.let {
                         sourceRequest = it
                     }

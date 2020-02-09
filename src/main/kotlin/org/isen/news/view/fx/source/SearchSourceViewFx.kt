@@ -158,10 +158,16 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
     override fun updateStatusCode(code: Int) {
         logger.info("receive error code $code")
         Platform.runLater {
-            statusLabel.text = "Status code : " + when (code) {
-                200 -> "$code - message : ok"
-                401 -> "$code - message : api key error unauthorized"
-                429 -> "$code - message : too many requests for today"
+            statusLabel.text = "Status code : " + when(code) {
+                200 -> "$code - OK. The request was executed successfully"
+                401 -> "$code - Unauthorized. Your API key was missing from " +
+                        "the request, or wasn't correct"
+                400 -> "$code - Bad Request. The request was unacceptable, " +
+                        "often due to a missing or misconfigured parameter"
+                429 -> "$code - Too Many Requests. You made too many requests " +
+                        "within a window of time and have been rate limited. " +
+                        "Back off for a while"
+                500 -> "$code - Server Error. Something went wrong on our side"
                 else -> "$code - message : error"
             }
         }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Properties>
-        <Property name="filename">target/test.log</Property>
+        <Property name="filename">target/kotlin_news_app.log</Property>
     </Properties>
 
     <Appenders>

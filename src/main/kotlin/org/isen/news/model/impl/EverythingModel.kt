@@ -1,6 +1,8 @@
 package org.isen.news.model.impl
 
 import com.github.kittinunf.fuel.httpGet
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.apache.logging.log4j.kotlin.Logging
 import org.isen.news.model.INewsEverythingModel
 import org.isen.news.model.data.EverythingQuery
@@ -24,47 +26,14 @@ class EverythingModel : DefaultNewsModel(), INewsEverythingModel {
         }
     }
 
-    override fun findArticles(
-            q: String?,
-            qInTitle: String?,
-            sources: String?,
-            domains: String?,
-            excludeDomains: String?,
-            from: Date?,
-            to: Date?,
-            languages: String?,
-            sortBy: SortBy,
-            page: Int?
-    ) {
-
+    override fun findArticles(query: EverythingQuery) {
+        logger.info("get articles from everything")
+        GlobalScope.launch { getArticles(query) }
     }
 
-    private suspend fun getArticles(
-            q: String?,
-            qInTitle: String?,
-            sources: String?,
-            domains: String?,
-            excludeDomains: String?,
-            from: Date?,
-            to: Date?,
-            languages: String?,
-            sortBy: SortBy,
-            page: Int?
-    ) {
-        buildEverythingQuery(
-            EverythingQuery(
-                    q,
-                    qInTitle,
-                    sources,
-                    domains,
-                    excludeDomains,
-                    from,
-                    to,
-                    languages,
-                    sortBy,
-                    page
-            )
-        ).httpGet().responseObject(EverythingRequest.Deserializer()) {
+    private suspend fun getArticles(query: EverythingQuery) {
+        buildEverythingQuery(query).httpGet().responseObject(EverythingRequest
+                .Deserializer()) {
             request, response, result ->
             logger.info("StatusCode (breaking news):${response.statusCode}")
             errorCode = response.statusCode
