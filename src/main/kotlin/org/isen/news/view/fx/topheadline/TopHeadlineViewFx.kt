@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat
 class TopHeadlineViewFx : View("Breaking News"), INewsView {
     companion object : Logging
 
-    private val controller: TopHeadlineFxController by inject()
+    private val headlineFxController: TopHeadlineFxController by inject()
     private val sourceController: SourceFxController by inject()
 
     private val categories = Category.values().toList().asObservable()
@@ -58,7 +58,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                             items = categories
                                             value = Category.GENERAL
                                             this.valueProperty().onChange {
-                                                controller.findBreakingNews(
+                                                headlineFxController.findBreakingNews(
                                                         countrySelect.selectedItem?.alpha2Code,
                                                         categorySelect.selectedItem?.title,
                                                         null,
@@ -73,7 +73,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                             countrySelect = this
                                             prefWidth = 120.0
                                             this.valueProperty().onChange {
-                                                controller.findBreakingNews(
+                                                headlineFxController.findBreakingNews(
                                                         countrySelect.selectedItem?.alpha2Code,
                                                         categorySelect.selectedItem?.title,
                                                         null,
@@ -88,7 +88,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                             keywordsArea = this
                                             prefWidth = 120.0
                                             this.textProperty().onChange {
-                                                controller.findBreakingNews(
+                                                headlineFxController.findBreakingNews(
                                                         countrySelect.selectedItem?.alpha2Code,
                                                         categorySelect.selectedItem?.title,
                                                         null,
@@ -99,7 +99,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                         }
                                     }
                                     button("Filter").action {
-                                        controller.findBreakingNews(
+                                        headlineFxController.findBreakingNews(
                                                 countrySelect.selectedItem?.alpha2Code,
                                                 categorySelect.selectedItem?.title,
                                                 null,
@@ -122,7 +122,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                             sourceSelect = this
                                             prefWidth = 120.0
                                             this.valueProperty().onChange {
-                                                controller.findBreakingNewsBySource(
+                                                headlineFxController.findBreakingNewsBySource(
                                                         sourceSelect.value.toString(),
                                                         null,
                                                         keywordsAreaSource.text
@@ -136,7 +136,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                             keywordsAreaSource = this
                                             prefWidth = 120.0
                                             this.textProperty().onChange {
-                                                controller.findBreakingNewsBySource(
+                                                headlineFxController.findBreakingNewsBySource(
                                                         sourceSelect.value.toString(),
                                                         null,
                                                         keywordsAreaSource.text
@@ -146,7 +146,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                         }
                                     }
                                     button("Filter").action {
-                                        controller.findBreakingNewsBySource(
+                                        headlineFxController.findBreakingNewsBySource(
                                                 sourceSelect.value.toString(),
                                                 null,
                                                 keywordsAreaSource.text
@@ -185,14 +185,14 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                 pageLabel.text = (pageLabel.text.toInt() - 1).toString()
                                 if (!filterDrawer.multiselect) {
                                     if (filterDrawer.items.first().expanded) {
-                                        controller.findBreakingNews(
+                                        headlineFxController.findBreakingNews(
                                                 countrySelect.selectedItem?.alpha2Code,
                                                 categorySelect.selectedItem?.title,
                                                 pageLabel.text.toInt(),
                                                 ""
                                         )
                                     } else if (filterDrawer.items.last().expanded) {
-                                        controller.findBreakingNewsBySource(
+                                        headlineFxController.findBreakingNewsBySource(
                                                 sourceSelect.value.toString(),
                                                 pageLabel.text.toInt(),
                                                 keywordsAreaSource.text
@@ -219,14 +219,14 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                             pageLabel.text = (pageLabel.text.toInt() + 1).toString()
                             if (!filterDrawer.multiselect) {
                                 if (filterDrawer.items.first().expanded) {
-                                    controller.findBreakingNews(
+                                    headlineFxController.findBreakingNews(
                                             countrySelect.selectedItem?.alpha2Code,
                                             categorySelect.selectedItem?.title,
                                             pageLabel.text.toInt(),
                                             ""
                                     )
                                 } else if (filterDrawer.items.last().expanded) {
-                                    controller.findBreakingNewsBySource(
+                                    headlineFxController.findBreakingNewsBySource(
                                             sourceSelect.value.toString(),
                                             pageLabel.text.toInt(),
                                             keywordsAreaSource.text
@@ -265,7 +265,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
             logger.info("clearing news view")
             breakingNewsGrid.children.clear()
             logger.info("updating breaking news")
-            if (!data.articles.isNullOrEmpty()) {
+            if (!data.articles.isNullOrEmpty() && data.status == "ok") {
                 data.articles.withIndex().forEach { (index, item) ->
                     logger.info("updateNews $item")
                     breakingNewsGrid.addRow(index, borderpane {
@@ -326,16 +326,22 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
     private fun updateStatusCode(code: Int) {
         Platform.runLater {
             statusLabel.text = "Status code : " + when(code) {
-                200 -> "$code - message : ok"
-                401 -> "$code - message : api key error unauthorized"
-                429 -> "$code - message : too many requests for today"
+                200 -> "$code - OK. The request was executed successfully"
+                401 -> "$code - Unauthorized. Your API key was missing from " +
+                        "the request, or wasn't correct"
+                400 -> "$code - Bad Request. The request was unacceptable, " +
+                        "often due to a missing or misconfigured parameter"
+                429 -> "$code - Too Many Requests. You made too many requests " +
+                        "within a window of time and have been rate limited. " +
+                        "Back off for a while"
+                500 -> "$code - Server Error. Something went wrong on our side"
                 else -> "$code - message : error"
             }
         }
     }
 
     init {
-        controller.registerView(this)
+        headlineFxController.registerView(this)
         sourceController.registerView(this)
 
         with(root) {
@@ -343,9 +349,9 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
             prefHeight = 800.0
         }
 
-        controller.findCountries()
+        headlineFxController.findCountries()
         logger.info("all countries names fetched successfully")
-        controller.findBreakingNews("fr", "general", null, null)
+        headlineFxController.findBreakingNews("fr", "general", null, null)
         logger.info("breaking news found for France (fr)")
         sourceController.findSources(null, null, null)
         logger.info("all sources names fetched successfully")
@@ -367,7 +373,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                     countrySelect.items.add(it)
                 }
                 Platform.runLater {
-                    countrySelect.value = controller.indexFromCode("fr")?.let {
+                    countrySelect.value = headlineFxController.indexFromCode("fr")?.let {
                         countrySelect.items[it]
                     }
                 }

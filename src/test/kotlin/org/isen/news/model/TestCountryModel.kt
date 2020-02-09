@@ -54,7 +54,8 @@ class TestCountryModel {
 
         assertTrue(
                 passObserver,
-                "after update location on property, observer must receive location"
+                "after update country on property, observer must receive " +
+                        "country"
         )
         assertEquals(54, model.countries.size)
         model.countries.forEach {

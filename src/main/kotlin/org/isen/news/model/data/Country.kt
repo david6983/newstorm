@@ -23,6 +23,6 @@ data class Country(
     }
 
     override fun toString(): String {
-        return "$name"
+        return name
     }
 }

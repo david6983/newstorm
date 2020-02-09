@@ -56,7 +56,7 @@ class ArticleViewFx : Fragment("Article") {
                     // article content
                     article.content?.let { label(it)  }
                     if (article.content.isNullOrEmpty()) {
-                        label("no content (read it on the official website")
+                        label("no content (read it on the official website)")
                     }
                 }
             }

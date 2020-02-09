@@ -112,8 +112,7 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
             logger.info("clearing news view")
             sourceGrid.children.clear()
             logger.info("updating sources")
-            statusLabel.text = "Status code : ${data.status}"
-            if (!data.sources.isNullOrEmpty()) {
+            if (!data.sources.isNullOrEmpty() && data.status == "ok") {
                 data.sources.withIndex().forEach { (index, item) ->
                     logger.info("updateNews $item")
                     sourceGrid.addRow(index, borderpane {
