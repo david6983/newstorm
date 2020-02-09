@@ -155,7 +155,8 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
         }
     }
 
-    private fun updateStatusCode(code: Int) {
+    override fun updateStatusCode(code: Int) {
+        logger.info("receive error code $code")
         Platform.runLater {
             statusLabel.text = "Status code : " + when (code) {
                 200 -> "$code - message : ok"
@@ -201,10 +202,6 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
             is SourceRequest -> {
                 logger.info("receive sources $data")
                 updateSources(data)
-            }
-            is Int -> {
-                TopHeadlineViewFx.logger.info("receive error code $data")
-                updateStatusCode(data)
             }
             else -> {
                 logger.info("data : $data")

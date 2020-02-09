@@ -302,10 +302,14 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                             paddingAll = 15
                         }
                         center {
-                            text(item.description) {
-                                style {
-                                    fontStyle = FontPosture.ITALIC
-                                    fontSize = 12.px
+                            hbox {
+                                item.description?.let {
+                                    label(it) {
+                                        style {
+                                            fontStyle = FontPosture.ITALIC
+                                            fontSize = 16.px
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -323,7 +327,8 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
         }
     }
 
-    private fun updateStatusCode(code: Int) {
+    override fun updateStatusCode(code: Int) {
+        logger.info("receive error code $code")
         Platform.runLater {
             statusLabel.text = "Status code : " + when(code) {
                 200 -> "$code - OK. The request was executed successfully"
@@ -382,13 +387,11 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                 logger.info("receive sources $data")
                 updateSources(data)
             }
-            is Int -> {
-                logger.info("receive error code $data")
-                updateStatusCode(data)
-            }
             else -> {
                 logger.info("data : $data")
             }
         }
     }
+
+
 }

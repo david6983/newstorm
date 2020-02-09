@@ -162,6 +162,10 @@ class TopHeadlineView : INewsView, ActionListener {
         }
     }
 
+    override fun updateStatusCode(code: Int) {
+
+    }
+
     override fun actionPerformed(e: ActionEvent?) {
 
     }

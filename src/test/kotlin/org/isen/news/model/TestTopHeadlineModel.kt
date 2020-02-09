@@ -117,9 +117,13 @@ class TestTopHeadlineModel {
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 // pour savoir si on a bien creer l'observeur
-                passObserver = true;
-                TestDefaultNewsModel.logger.info("updateNews with : $data")
+                passObserver = true
+                logger.info("updateNews with : $data")
                 assertEquals(HeadlineRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                logger.info("updateStatusCode with : $code")
             }
         }
 
@@ -145,6 +149,10 @@ class TestTopHeadlineModel {
                 passObserver = true;
                 TestDefaultNewsModel.logger.info("updateNews with : $data")
                 assertEquals(HeadlineRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                logger.info("updateStatusCode with : $code")
             }
         }
 

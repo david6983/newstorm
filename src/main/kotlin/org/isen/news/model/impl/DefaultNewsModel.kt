@@ -54,7 +54,7 @@ open class DefaultNewsModel : ViewModel(), INewsModel {
         property, oldValue, newValue ->
         logger.info("error code change, notify observer")
         for (listener in listeners) {
-            listener.updateNews(newValue)
+            listener.updateStatusCode(newValue)
         }
     }
 

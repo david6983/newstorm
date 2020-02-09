@@ -46,9 +46,11 @@ class ArticleViewFx : Fragment("Article") {
                 }
                 row {
                     // article description
-                    label(article.description) {
-                        style {
-                            fontSize = 16.px
+                    article.description?.let {
+                        label(it) {
+                            style {
+                                fontSize = 16.px
+                            }
                         }
                     }
                 }

@@ -44,8 +44,12 @@ class TestSourceModel {
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 passObserver = true;
-                TestCountryModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(SourceRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                TestTopHeadlineModel.logger.info("updateStatusCode with : $code")
             }
         }
 
@@ -54,8 +58,9 @@ class TestSourceModel {
         model.sourceRequest = SourceRequest()
         assertTrue(
                 passObserver,
-                "after update sources on property, observer must receive sourceRequest"
-        )
+                "after update sources on property, observer must receive " +
+                        "sourceRequest")
+
     }
 
     @Test
@@ -66,8 +71,12 @@ class TestSourceModel {
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 passObserver = true;
-                TestCountryModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(SourceRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                TestTopHeadlineModel.logger.info("updateStatusCode with : $code")
             }
         }
 
@@ -95,8 +104,12 @@ class TestSourceModel {
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 passObserver = true;
-                TestCountryModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(SourceRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                TestTopHeadlineModel.logger.info("updateStatusCode with : $code")
             }
         }
 
@@ -124,8 +137,12 @@ class TestSourceModel {
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 passObserver = true;
-                TestCountryModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(SourceRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                TestTopHeadlineModel.logger.info("updateStatusCode with : $code")
             }
         }
 
@@ -153,8 +170,12 @@ class TestSourceModel {
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 passObserver = true;
-                TestCountryModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(SourceRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                TestTopHeadlineModel.logger.info("updateStatusCode with : $code")
             }
         }
 
@@ -177,13 +198,19 @@ class TestSourceModel {
     @Test
     fun findSourcesByCategoryAndLanguage() {
         var passObserver: Boolean = true
+        
+
         val model: SourceModel = SourceModel()
 
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 passObserver = true;
-                TestCountryModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(SourceRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                TestTopHeadlineModel.logger.info("updateStatusCode with : $code")
             }
         }
 
@@ -206,13 +233,19 @@ class TestSourceModel {
     @Test
     fun findSourcesByCategoryAndLanguageUnsuccess() {
         var passObserver: Boolean = true
+        
+
         val model: SourceModel = SourceModel()
 
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 passObserver = true;
-                TestCountryModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(SourceRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                TestTopHeadlineModel.logger.info("updateStatusCode with : $code")
             }
         }
 
@@ -235,13 +268,19 @@ class TestSourceModel {
     @Test
     fun findSourcesByCategoryAndCountrySuccess() {
         var passObserver: Boolean = true
+        
+
         val model: SourceModel = SourceModel()
 
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 passObserver = true;
-                TestCountryModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(SourceRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                TestTopHeadlineModel.logger.info("updateStatusCode with : $code")
             }
         }
 
@@ -264,13 +303,19 @@ class TestSourceModel {
     @Test
     fun findSourcesByCategoryAndCountryUnSuccess() {
         var passObserver: Boolean = true
+        
+
         val model: SourceModel = SourceModel()
 
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 passObserver = true;
-                TestCountryModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(SourceRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                TestTopHeadlineModel.logger.info("updateStatusCode with : $code")
             }
         }
 
@@ -298,8 +343,12 @@ class TestSourceModel {
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 passObserver = true;
-                TestCountryModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(SourceRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                TestTopHeadlineModel.logger.info("updateStatusCode with : $code")
             }
         }
 
@@ -327,8 +376,12 @@ class TestSourceModel {
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 passObserver = true;
-                TestCountryModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(SourceRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                TestTopHeadlineModel.logger.info("updateStatusCode with : $code")
             }
         }
 
@@ -356,8 +409,12 @@ class TestSourceModel {
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 passObserver = true;
-                TestCountryModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(SourceRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                TestTopHeadlineModel.logger.info("updateStatusCode with : $code")
             }
         }
 
@@ -385,8 +442,12 @@ class TestSourceModel {
         val myObserver = object : INewsModelObservable {
             override fun updateNews(data: Any) {
                 passObserver = true;
-                TestCountryModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(SourceRequest::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                TestTopHeadlineModel.logger.info("updateStatusCode with : $code")
             }
         }
 

@@ -23,6 +23,10 @@ class TestCountryModel {
                 logger.info("updateNews with : $data")
                 assertEquals(Array<Country>::class.java, data::class.java)
             }
+
+            override fun updateStatusCode(code: Int) {
+                logger.info("updateStatusCode with : $code")
+            }
         }
 
         model.register(myObserver)
@@ -44,6 +48,10 @@ class TestCountryModel {
                 passObserver = true;
                 logger.info("updateNews with : $data")
                 assertEquals(Country::class.java, data::class.java)
+            }
+
+            override fun updateStatusCode(code: Int) {
+                logger.info("updateStatusCode with : $code")
             }
         }
 
