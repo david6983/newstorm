@@ -1,5 +1,6 @@
 package org.isen.news.view
 
+import javafx.geometry.Insets
 import org.isen.news.model.data.Article
 import tornadofx.*
 import java.util.*
@@ -26,11 +27,14 @@ class TestFxFragmentParamView : View() {
             Date(),
             null)
 
-    override val root = vbox {
+    override val root = hbox {
         button("open article") {
             action {
                 find<TestArticleFragment>(mapOf("article" to item)).openWindow()
             }
+        }
+        button("Lorem") {
+
         }
     }
 }

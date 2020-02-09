@@ -147,7 +147,7 @@ class TestTopHeadlineModel {
             override fun updateNews(data: Any) {
                 // pour savoir si on a bien creer l'observeur
                 passObserver = true;
-                TestDefaultNewsModel.logger.info("updateNews with : $data")
+                logger.info("updateNews with : $data")
                 assertEquals(HeadlineRequest::class.java, data::class.java)
             }
 

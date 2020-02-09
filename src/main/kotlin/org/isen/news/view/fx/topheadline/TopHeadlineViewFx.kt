@@ -1,6 +1,7 @@
 package org.isen.news.view.fx.topheadline
 
 import javafx.application.Platform
+import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import javafx.scene.text.FontPosture
@@ -164,23 +165,28 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
         center {
             borderpane {
                 top {
-                    label("Breaking news") {
-                        style {
-                            fontSize = 42.px
+                    hbox {
+                        label("Breaking news") {
+                            style {
+                                fontSize = 42.px
+                            }
                         }
+                        alignment = Pos.CENTER
+                        paddingAll = 10
                     }
                 }
                 center {
-                    scrollpane {
+                    scrollpane(fitToWidth = true) {
                         gridpane {
                             breakingNewsGrid = this
                         }
-                        //prefWidth = 800.0
                     }
                 }
                 bottom {
-                    flowpane {
-                        button("Previous page").action {
+                    hbox {
+                        button("Previous page") {
+                            prefWidth = 1920 / 3.0
+                        }.action {
                             if (pageLabel.text.toInt() > 1) {
                                 pageLabel.text = (pageLabel.text.toInt() - 1).toString()
                                 if (!filterDrawer.multiselect) {
@@ -200,10 +206,10 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                     }
                                 } else {
                                     alert(Alert.AlertType.WARNING,
-                                "Multiselection not allowed",
-                                "You can't find breaking news by source " +
-                                        "and country, category ! Disable " +
-                                        "multiselect option"
+                                            "Multiselection not allowed",
+                                            "You can't find breaking news by source " +
+                                                    "and country, category ! Disable " +
+                                                    "multiselect option"
                                     )
                                 }
                             }
@@ -214,8 +220,12 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                 fontSize = 14.px
                                 fontWeight = FontWeight.BOLD
                             }
+                            alignment = Pos.CENTER
+                            prefWidth = 1920 / 3.0
                         }
-                        button("Next page").action {
+                        button("Next page") {
+                            prefWidth = 1920 / 3.0
+                        }.action {
                             pageLabel.text = (pageLabel.text.toInt() + 1).toString()
                             if (!filterDrawer.multiselect) {
                                 if (filterDrawer.items.first().expanded) {
@@ -239,7 +249,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
                                 )
                             }
                         }
-                        hgap = 550.0
+                        //hgap = 550.0
                         paddingAll = 15
                     }
                 }
@@ -268,55 +278,68 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
             if (!data.articles.isNullOrEmpty() && data.status == "ok") {
                 data.articles.withIndex().forEach { (index, item) ->
                     logger.info("updateNews $item")
-                    breakingNewsGrid.addRow(index, borderpane {
-                        top {
-                            label(item.title) {
+                    breakingNewsGrid.addRow(index,
+                            borderpane {
+                                top {
+                                    hbox {
+                                        label(item.title) {
+                                            style {
+                                                fontSize = 18.px
+                                                fontWeight = FontWeight.BOLD
+                                            }
+                                            paddingAll = 15
+                                            isWrapText = true
+                                        }
+                                        alignment = Pos.CENTER
+                                    }
+                                }
+                                bottom {
+                                    hbox {
+                                        if (item.author != null) {
+                                            label(item.author) {
+                                                prefWidth = 1920 / 3.0
+                                                alignment = Pos.CENTER
+                                            }
+                                        } else {
+                                            label("Unknown author") {
+                                                prefWidth = 1920 / 3.0
+                                                alignment = Pos.CENTER
+                                            }
+                                        }
+                                        label(formatter.format(item.publishedAt)) {
+                                            prefWidth = 1920 / 3.0
+                                            alignment = Pos.CENTER
+                                        }
+                                        button("Open") {
+                                            prefWidth = 1920 / 3.0
+                                            alignment = Pos.CENTER
+                                            action {
+                                                find<ArticleViewFx>(mapOf("article" to item)).openWindow(
+                                                        stageStyle = StageStyle.DECORATED
+                                                )
+                                            }
+                                        }
+                                    }
+                                    paddingAll = 15
+                                }
+                                center {
+                                    hbox {
+                                        item.description?.let {
+                                            label(it) {
+                                                isWrapText = true
+                                                style {
+                                                    fontStyle = FontPosture.ITALIC
+                                                    fontSize = 16.px
+                                                }
+                                            }
+                                        }
+                                        paddingAll = 15
+                                    }
+                                }
                                 style {
-                                    fontSize = 18.px
-                                    fontWeight = FontWeight.BOLD
+                                    borderColor += box(c(0, 0, 0))
                                 }
-                                paddingAll = 10
-                                textAlignment = TextAlignment.CENTER
-                            }
-                        }
-                        bottom {
-                            gridpane {
-                                row {
-                                    if (item.author != null) {
-                                        label(item.author)
-                                    } else {
-                                        label("Unknown author")
-                                    }
-                                    label(formatter.format(item.publishedAt))
-                                    button("Open") {
-                                        addClass("btn-info", "btn-lg")
-                                        action {
-                                            find<ArticleViewFx>(mapOf("article" to item)).openWindow(
-                                                    stageStyle = StageStyle.UTILITY
-                                            )
-                                        }
-                                    }
-                                    hgap = 450.0
-                                }
-                            }
-                            paddingAll = 15
-                        }
-                        center {
-                            hbox {
-                                item.description?.let {
-                                    label(it) {
-                                        style {
-                                            fontStyle = FontPosture.ITALIC
-                                            fontSize = 16.px
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        style {
-                            borderColor += box(c(0, 0, 0))
-                        }
-                    })
+                            })
                 }
             } else {
                 logger.info("no results found")
@@ -330,7 +353,7 @@ class TopHeadlineViewFx : View("Breaking News"), INewsView {
     override fun updateStatusCode(code: Int) {
         logger.info("receive error code $code")
         Platform.runLater {
-            statusLabel.text = "Status code : " + when(code) {
+            statusLabel.text = "Status code : " + when (code) {
                 200 -> "$code - OK. The request was executed successfully"
                 401 -> "$code - Unauthorized. Your API key was missing from " +
                         "the request, or wasn't correct"

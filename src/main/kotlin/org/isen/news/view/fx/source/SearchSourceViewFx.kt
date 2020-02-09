@@ -1,6 +1,7 @@
 package org.isen.news.view.fx.source
 
 import javafx.application.Platform
+import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import javafx.scene.text.FontWeight
@@ -84,14 +85,18 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
         center {
             borderpane {
                 top {
-                    label("Results") {
-                        style {
-                            fontSize = 42.px
+                    hbox {
+                        label("Results") {
+                            style {
+                                fontSize = 42.px
+                            }
                         }
+                        alignment = Pos.CENTER
+                        paddingAll = 10
                     }
                 }
                 center {
-                    scrollpane {
+                    scrollpane(fitToWidth = true) {
                         gridpane {
                             sourceGrid = this
                         }
@@ -117,28 +122,47 @@ class SearchSourceViewFx : View("Search a source"), INewsView {
                     logger.info("updateNews $item")
                     sourceGrid.addRow(index, borderpane {
                         top {
-                            label(item.name) {
-                                style {
-                                    fontSize = 18.px
-                                    fontWeight = FontWeight.BOLD
+                            hbox {
+                                label(item.name) {
+                                    style {
+                                        fontSize = 18.px
+                                        fontWeight = FontWeight.BOLD
+                                    }
+                                    paddingAll = 15
+                                    isWrapText = true
                                 }
-                                paddingAll = 10
-                                textAlignment = TextAlignment.CENTER
+                                alignment = Pos.CENTER
                             }
                         }
                         bottom {
-                            button("Official website").action {
-                                hostServices.showDocument(item.url)
+                            hbox {
+                                button("Official website").action {
+                                    hostServices.showDocument(item.url)
+                                }
+                                alignment = Pos.CENTER
+                                paddingAll = 15
                             }
-                            paddingAll = 15
                         }
                         center {
                             vbox {
-                                label(item.description)
-                                label("category : ${item.category}")
-                                label("language : ${item.language}")
-                                label("country : ${item.country}")
-                                paddingAll = 15
+                                hbox {
+                                    label(item.description) {
+                                        paddingAll = 15
+                                        style {
+                                            fontWeight = FontWeight.BOLD
+                                        }
+                                    }
+                                    alignment = Pos.CENTER
+                                }
+                                vbox {
+                                    label("category : ${item.category}")
+                                    label("language : ${item.language}")
+                                    label("country : ${item.country}")
+                                    paddingAll = 15
+                                    style {
+                                        fontSize = 14.px
+                                    }
+                                }
                             }
                         }
                         style {
