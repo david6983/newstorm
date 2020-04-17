@@ -1,0 +1,10 @@
+features :
+- api key system at launch
+- cache system using https://github.com/kittinunf/Fuse
+- advanced search view
+- better css design
+
+documentation :
+- generate technical documentation
+- create a user manual
+- continue the README
