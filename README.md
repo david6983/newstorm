@@ -5,7 +5,7 @@ using [newsapi](https://newsapi.org/v2/) REST api
 
 ![mainview](screeshots/mainview.png)
 
-## context
+## Context
 
 This project was given by my lecturer in kotlin development
 at the [ISEN Toulon](https://www.isen.fr/) engineering school.
