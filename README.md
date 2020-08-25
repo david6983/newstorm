@@ -28,8 +28,8 @@ window when the user search for a specific source
 
 ### development
 
-see TODO.txt for the features to implement
-send me an email to be added in the [Trello](https://trello.com/davidhaioum/boards) team
+- see TODO.txt for the features to implement
+- send me an email to be added in the [Trello](https://trello.com) team
 
 ### report a bug
 
